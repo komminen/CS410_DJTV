@@ -7,14 +7,13 @@ class JaccardCalculator:
         self.documents = documents
         self.num_docs = len(documents)
         self.sim_matrix = np.zeros((self.num_docs, self.num_docs))
-        self.similar_movies_result = {}
 
     def jaccardSimilarity(self, v1, v2):
         v1 = set(v1)
         v2 = set(v2)
         return float(len(v1 & v2)) / len(v1 | v2)
 
-    def buildJaccardSimilarityMatrix(self):
+    def buildSimilarityMatrix(self):
 
         for d1 in range(self.num_docs):
             for d2 in range(d1, self.num_docs):
