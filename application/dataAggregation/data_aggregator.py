@@ -3,7 +3,7 @@ import os
 import json
 import pickle
 from imdb import Cinemagoer
-from json_processpr import json_zip, json_unzip
+from json_processor import json_zip, json_unzip
 
 # create an instance of the Cinemagoer class
 ia = Cinemagoer()
