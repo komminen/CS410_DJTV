@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CS410 Final Project - JDTV - Movie Search Engine</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+</head>
+<body>
+ <div class="container">
+    <center><h1>Movie Search</h1></center>
+  <div class="row">    
+   <div class="col-xs-8 col-xs-offset-2">
+    <form action="/search/" method="post">
+        <div class="input-group">
+        <input type="text" class="form-control" name="query" id="search" placeholder="Search">
+        <span class="input-group-btn">
+            <button name="searchBtn" class="btn btn-default" type="submit">
+            <span class="glyphicon glyphicon-search"></span>
+            </button>
+        </span>
+        </div>
+    </form>
+   </div>
+  </div>
+</div>
+
+{{ movieResults }} 
+
+</body>
+</html>
