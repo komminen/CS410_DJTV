@@ -1,6 +1,6 @@
 stop-words = "stopwords.txt"
 prefix = "."
-dataset = "movies"
+dataset = "movies_whole"
 corpus = "line.toml"
 index = "idx"
 [query-runner]

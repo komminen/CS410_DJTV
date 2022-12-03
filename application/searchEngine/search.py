@@ -1,6 +1,8 @@
 import json
 import sys
 import time
+import shutil
+import os
 import metapy
 import pytoml
 
@@ -60,8 +62,10 @@ def load_ranker(ranker):
     else:
         return -1
 
-def run(cfg, ranker_input):
+def run(cfg, ranker_input, query_string):
     # build indexes
+    if os.path.exists(os.getcwd() + '\idx'):
+        shutil.rmtree(os.getcwd() + '\idx')
     idx = metapy.index.make_inverted_index(cfg)
     # load ranker
     ranker = load_ranker(ranker_input)
@@ -91,16 +95,13 @@ def run(cfg, ranker_input):
     start_time = time.time()
     top_k = 10
 
-    query_path = query_cfg.get('query-path', 'queries.txt')
 
     query = metapy.index.Document()
     ranked_all_relevants = None
-    with open(query_path) as query_file:
-        for query_num, line in enumerate(query_file):
-            query.content(line.strip().lower())
-            results = ranker.score(idx, query, top_k)
-            ranked_all_relevants = results
-            print('Relevant movies (ranked): {} for the query: "{}"'.format(results, query.content()))
+    query.content(query_string.strip().lower())
+    results = ranker.score(idx, query, top_k)
+    ranked_all_relevants = results
+    print('Relevant movies (ranked): {} for the query: "{}"'.format(results, query.content()))
     print("Elapsed: {} seconds".format(round(time.time() - start_time, 4)))
 
     all_ids = []
@@ -125,12 +126,14 @@ if __name__ == '__main__':
     find_movies_with_cast('Victor Lipari')
 
     # check if correct command line is used
-    if len(sys.argv) != 3:
-        print("Usage: {} config.toml your_ranker".format(sys.argv[0]))
+    if len(sys.argv) != 4:
+        print("Usage: {} config.toml your_ranker query_string".format(sys.argv[0]))
         sys.exit(1)
 
     # get the config arg
     cfg = sys.argv[1]
     # ranker
     ranker = sys.argv[2]
-    run(cfg, ranker)
+    # query_string
+    query_string = sys.argv[3]
+    run(cfg, ranker, query_string)
