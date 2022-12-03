@@ -71,7 +71,7 @@ def run(cfg, ranker_input, query_string):
     ranker = load_ranker(ranker_input)
     if ranker == -1:
         print('ranker is not set correctly')
-        sys.exit(-1)
+        return
     # we don't have IR feedbacks so skip
     # ev = metapy.index.IREval(cfg)
 
@@ -89,7 +89,7 @@ def run(cfg, ranker_input, query_string):
     query_cfg = cfg_d['query-runner']
     if query_cfg is None:
         print("query-runner table needed in {}".format(cfg))
-        sys.exit(1)
+        return
 
     # start timer + how many top results do you want
     start_time = time.time()
@@ -114,10 +114,11 @@ def run(cfg, ranker_input, query_string):
     # note that the id in ranked_all_relevants are 0-indexed
     # so 380 -> will go to line 381 in movies_ids file to get that id, which is the correct behavior
     all_rev_movie_ids = []
-    print(ranked_all_relevants)
     for ranked_all_relevant in ranked_all_relevants:
         all_rev_movie_ids.append(all_ids[ranked_all_relevant[0]])
     print('all relevant movies ids ranked are ' + ' '.join(all_rev_movie_ids))
+    print(all_rev_movie_ids)
+    return all_rev_movie_ids
 
 if __name__ == '__main__':
     # demos
@@ -131,9 +132,13 @@ if __name__ == '__main__':
         sys.exit(1)
 
     # get the config arg
+    # should be "config.toml" or "config_whole.toml"
     cfg = sys.argv[1]
     # ranker
+    # should be "bm25" or "jm" or "dp"
     ranker = sys.argv[2]
     # query_string
+    # can be any string
     query_string = sys.argv[3]
+    
     run(cfg, ranker, query_string)
