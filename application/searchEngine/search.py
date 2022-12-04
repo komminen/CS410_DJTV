@@ -77,7 +77,6 @@ class movieSearchEngine:
         if os.path.exists(os.getcwd() + '\idx'):
             shutil.rmtree(os.getcwd() + '\idx')
         
-
         idx = metapy.index.make_inverted_index(self.cfg)
         # load ranker
         ranker = self.load_ranker(self.ranker)
@@ -110,6 +109,7 @@ class movieSearchEngine:
         query = metapy.index.Document()
         ranked_all_relevants = None
         query.content(query_string.strip().lower())
+        print("PASS")
         results = ranker.score(idx, query, top_k)
         ranked_all_relevants = results
         print('Relevant movies (ranked): {} for the query: "{}"'.format(results, query.content()))
