@@ -9,10 +9,10 @@ import pytoml
 
 class movieSearchEngine:
 
-    def __init__(self, cfg="config_whole.toml", ranker="bm25"):
+    def __init__(self, cfg, movie_review_path, ranker="bm25"):
         self.cfg = cfg
         self.ranker = ranker
-        self.movie_reviews = json.load(open('self.movie_reviews_dataset.json'))
+        self.movie_reviews = json.load(open(movie_review_path))
 
     # simple search
     def search(self, search_param):
@@ -58,7 +58,7 @@ class movieSearchEngine:
                 break
         return movies
 
-    def load_ranker(ranker):
+    def load_ranker(self, ranker):
         if ranker == 'bm25':
             return metapy.index.OkapiBM25(k1=1.2,b=0.75,k3=500)
         elif ranker == 'jm':
@@ -69,12 +69,18 @@ class movieSearchEngine:
             return -1
 
     def run(self, query_string):
+        
+        # Change Directory to searchEngine folder
+        os.chdir("application/searchEngine")
+        
         # build indexes
         if os.path.exists(os.getcwd() + '\idx'):
             shutil.rmtree(os.getcwd() + '\idx')
+        
+
         idx = metapy.index.make_inverted_index(self.cfg)
         # load ranker
-        ranker = self.load_ranker(self.ranker_input)
+        ranker = self.load_ranker(self.ranker)
         if ranker == -1:
             print('ranker is not set correctly')
             return
@@ -86,7 +92,7 @@ class movieSearchEngine:
         top_k = 10
 
         # get the config dictionary
-        with open(cfg, 'r') as fin:
+        with open(self.cfg, 'r') as fin:
             cfg_d = pytoml.load(fin)
 
         # grab the query runner
@@ -100,7 +106,6 @@ class movieSearchEngine:
         # start timer + how many top results do you want
         start_time = time.time()
         top_k = 10
-
 
         query = metapy.index.Document()
         ranked_all_relevants = None
@@ -123,7 +128,11 @@ class movieSearchEngine:
         for ranked_all_relevant in ranked_all_relevants:
             all_rev_movie_ids.append(all_ids[ranked_all_relevant[0]])
         print('all relevant movies ids ranked are ' + ' '.join(all_rev_movie_ids))
-        print(all_rev_movie_ids)
+        # print(all_rev_movie_ids)
+
+        # Switch to root
+        os.chdir("../../")
+
         return all_rev_movie_ids
 
 # if __name__ == '__main__':

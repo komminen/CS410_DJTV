@@ -5,7 +5,11 @@ from application.searchEngine.search import movieSearchEngine
 # declaring app name
 app = Flask(__name__)
 
-movie_search_engine = movieSearchEngine()
+movie_search_engine = movieSearchEngine(
+    cfg="config.toml", 
+    movie_review_path="application\searchEngine\movie_reviews_dataset.json",
+    ranker="bm25"
+)
 
 # defining home page
 @app.route('/')
@@ -19,6 +23,10 @@ def index():
 def searchMovies():
     query = request.form.get("query")
     movie_result = movie_search_engine.run(query)
+    movie_result = {
+        "results": movie_result
+    }
+    print(movie_result)
 
     return render_template("index.html", movieResults=movie_result)
 
