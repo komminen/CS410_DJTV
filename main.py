@@ -41,8 +41,6 @@ def searchMovies():
                 "sentiment": movies_sentiment[movie_id]["sentiment"]
             }
         )
-    
-    print(output)
 
     return render_template("index.html", movieResults=output)
 
