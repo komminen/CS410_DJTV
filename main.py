@@ -1,9 +1,11 @@
 # importing modules
 from flask import Flask, render_template, request
-from application.searchEngine.dummyTest import queryMovies
+from application.searchEngine.search import movieSearchEngine
   
 # declaring app name
 app = Flask(__name__)
+
+movie_search_engine = movieSearchEngine()
 
 # defining home page
 @app.route('/')
@@ -16,7 +18,7 @@ def index():
 @app.route('/search/', methods=['POST'])
 def searchMovies():
     query = request.form.get("query")
-    movie_result = queryMovies(query)
+    movie_result = movie_search_engine.run(query)
 
     return render_template("index.html", movieResults=movie_result)
 
