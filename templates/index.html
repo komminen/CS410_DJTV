@@ -4,7 +4,8 @@
     <title>CS410 Final Project - JDTV - Movie Search Engine</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel='stylesheet' type="text/css" href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
 </head>
 <body>
  <div class="container">
@@ -25,7 +26,29 @@
   </div>
 </div>
 
-{{ movieResults }} 
+<table>
+    <caption>Search Result</caption>
+    <thead>
+      <tr>
+        <th scope="col">Movie Poster</th>
+        <th scope="col">Movie Title</th>
+        <th scope="col">Year</th>
+        <th scope="col">Sentiment</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% block content %}
+    {% for movie in movieResults %}
+        <tr>
+            <td scope="row"><img src={{movie.cover_url}}></td>
+            <td><a href="/detail/{{movie.movie_id}}">{{movie.localized_title}}</a></td>
+            <td><a href="/detail/{{movie.movie_id}}">{{movie.year}}</a></td>
+            <td><a href="/detail/{{movie.movie_id}}">{{movie.sentiment}}</a></td>
+        </tr>
+    {% endfor %}
+    {% endblock %}        
+    </tbody>
+  </table>
 
 </body>
 </html>
