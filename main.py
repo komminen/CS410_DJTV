@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 # Init
 movie_search_engine = movieSearchEngine(
-    cfg="config.toml", 
+    cfg="config_whole.toml", 
     movie_review_path="application/searchEngine/movie_reviews_dataset.json",
     ranker="bm25"
 )
