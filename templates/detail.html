@@ -8,8 +8,69 @@
     <link rel='stylesheet' type="text/css" href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
 </head>
 <body>
- 
-{{movie_detail}}
+    <div class="container">
+        <div title="header" class="header">
+            <h1>Movie Details</h1>
+        </div>
+    </div>
+    <br>
+    <br>
+    <table>
+    <thead>
+      <tr>
+        <th scope="col">Attribute</th>
+        <th scope="col">Value</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% block content %}
+    {% for movieDetail in movie_detail %}
+        <tr>
+            <td>Name (Click name for link to IMDB)</td>
+            <td><a href="https://www.imdb.com/title/tt{{ movieDetail.movie_id }}" target="_blank" rel="noopener noreferrer">{{ movieDetail.localized_title }}</a></td>
+        </tr>
+        <tr>
+            <td>Year Released</td>
+            <td>{{ movieDetail.year }}</td>
+        </tr>
+        <tr>
+            <td>Length (minutes)</td>
+            <td>{{ movieDetail.length }}</td>
+        </tr>
+        <tr>
+            <td>Rating</td>
+            <td>{{ movieDetail.rating }}</td>
+        </tr>
+        <tr>
+            <td>Review Sentiment</td>
+            <td>{{ movieDetail.sentiment }} <br><br> {{ movieDetail.num_reviews }} Reviews | {{ movieDetail.num_pos }} Positive | {{ movieDetail.num_neg }} Negative | {{ movieDetail.num_neu }} Neutral</td>
+        </tr>
+
+        <tr>
+            <td>Genre(s)</td>
+            <td>
+                {% for genre in movieDetail.genres %}
+                    {{ genre }},
+                {%  endfor %}
+            </td>
+        </tr>
+
+        <tr>
+            <td>Summary</td>
+            <td>{{ movieDetail.summary }}</td>
+        </tr>
+        <tr>
+            <td>Cast</td>
+            <td>
+                {% for castMember in movieDetail.cast %}
+                    {{ castMember }},
+                {%  endfor %}
+            </td>
+        </tr>
+    {% endfor %}
+    {% endblock %}
+    </tbody>
+  </table>
 
 </body>
 </html>

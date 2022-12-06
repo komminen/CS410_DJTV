@@ -8,12 +8,14 @@ app = Flask(__name__)
 
 # Init
 movie_search_engine = movieSearchEngine(
-    cfg="config.toml", 
+    cfg="config_whole.toml",
     movie_review_path="application/searchEngine/movie_reviews_dataset.json",
     ranker="bm25"
 )
 movies_metadata = json.load(open("data/movies_metadata.json"))
 movies_sentiment = json.load(open("data/review_sentiment_counts.json"))
+# For now, hard code to bert which had the best results
+movies_similar = json.load(open("data/similarMovies_bert.json"))
 
 
 # defining home page
@@ -46,10 +48,42 @@ def searchMovies():
 
 @app.route('/detail/<movie_id>/', methods=['GET'])
 def movieDetail(movie_id):
-    output = {'movie_id': movie_id}
+    output = [] #{'movie_id': movie_id}
+    summary = movies_metadata[movie_id]["summary"]
+    sentiment = movies_sentiment[movie_id]["sentiment"]
+    if sentiment == "pos":
+        sentiment = "Positive"
+    elif sentiment == "neu":
+        sentiment = "Neutral"
+    elif sentiment == "neg":
+        sentiment = "Negative"
+    plotindex = summary.find("Plot:")
+    if plotindex != -1:
+        plotindex += 5
+        summary = summary[plotindex:]
+    output.append(
+        {
+            "movie_id": movie_id,
+            "cover_url": movies_metadata[movie_id]["cover_url"],
+            "localized_title": movies_metadata[movie_id]["localized_title"],
+            "year": movies_metadata[movie_id]["year"],
+            "rating": movies_metadata[movie_id]["rating"],
+            "director": movies_metadata[movie_id]["director"],
+            "length": movies_metadata[movie_id]["runtimes"],
+            "genres": movies_metadata[movie_id]["genres"],
+            "cast": movies_metadata[movie_id]["cast"],
+            "summary": summary,
+            "sentiment": sentiment,
+            "num_reviews": movies_sentiment[movie_id]["num_reviews"],
+            "num_neg": movies_sentiment[movie_id]["num_neg"],
+            "num_neu": movies_sentiment[movie_id]["num_neu"],
+            "num_pos": movies_sentiment[movie_id]["num_pos"]
+        }
+    )
     return render_template("detail.html", movie_detail=output)
 
 
 if __name__ == '__main__':
     # running app
-    app.run(host='0.0.0.0', port=5000, threaded=False)
+    print("foo")
+    #app.run(host='0.0.0.0', port=5000, threaded=False)

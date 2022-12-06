@@ -26,7 +26,7 @@ table tr:hover {
 table th,
 table td {
   padding: .625em;
-  text-align: center;
+  /* text-align: center; */
 }
 
 table th {
@@ -93,9 +93,17 @@ a:link {
   text-decoration: none;
 }
 
+.header {
+  text-align: center;
+}
+
+.leftAligned {
+  text-align: left;
+}
 /* general styling */
 body {
   font-family: "Open Sans", sans-serif;
   line-height: 1.25;
 }
+
 
