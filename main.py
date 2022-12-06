@@ -17,6 +17,15 @@ movies_sentiment = json.load(open("data/review_sentiment_counts.json"))
 # For now, hard code to bert which had the best results
 movies_similar = json.load(open("data/similarMovies_bert.json"))
 
+def fixSentimentText(sentiment):
+    fixedSentiment = sentiment
+    if sentiment == "pos":
+        fixedSentiment = "Positive"
+    elif sentiment == "neu":
+        fixedSentiment = "Neutral"
+    elif sentiment == "neg":
+        fixedSentiment = "Negative"
+    return fixedSentiment
 
 # defining home page
 @app.route('/')
@@ -40,7 +49,7 @@ def searchMovies():
                 "cover_url": movies_metadata[movie_id]["cover_url"],
                 "localized_title": movies_metadata[movie_id]["localized_title"],
                 "year": movies_metadata[movie_id]["year"],
-                "sentiment": movies_sentiment[movie_id]["sentiment"]
+                "sentiment": fixSentimentText(movies_sentiment[movie_id]["sentiment"])
             }
         )
 
@@ -49,18 +58,32 @@ def searchMovies():
 @app.route('/detail/<movie_id>/', methods=['GET'])
 def movieDetail(movie_id):
     output = [] #{'movie_id': movie_id}
+    similarMovies = []
+
+    # Clean up the sentiment text for output in the rendered html
+    sentiment = fixSentimentText(movies_sentiment[movie_id]["sentiment"])
+
+    # Clean up the summary text for output in the rendered html
     summary = movies_metadata[movie_id]["summary"]
-    sentiment = movies_sentiment[movie_id]["sentiment"]
-    if sentiment == "pos":
-        sentiment = "Positive"
-    elif sentiment == "neu":
-        sentiment = "Neutral"
-    elif sentiment == "neg":
-        sentiment = "Negative"
     plotindex = summary.find("Plot:")
     if plotindex != -1:
         plotindex += 5
         summary = summary[plotindex:]
+
+    # Clean up the similar movie list for output in the rendered html
+    for similarMovieId in movies_similar[movie_id]["similar_movie_ids"]:
+        similarMovieSentiment = fixSentimentText(movies_sentiment[similarMovieId]["sentiment"])
+
+        similarMovies.append(
+            {
+                "movie_id": similarMovieId,
+                "cover_url": movies_metadata[similarMovieId]["cover_url"],
+                "localized_title": movies_metadata[similarMovieId]["localized_title"],
+                "year": movies_metadata[similarMovieId]["year"],
+                "sentiment": similarMovieSentiment
+            }
+        )
+
     output.append(
         {
             "movie_id": movie_id,
@@ -77,7 +100,8 @@ def movieDetail(movie_id):
             "num_reviews": movies_sentiment[movie_id]["num_reviews"],
             "num_neg": movies_sentiment[movie_id]["num_neg"],
             "num_neu": movies_sentiment[movie_id]["num_neu"],
-            "num_pos": movies_sentiment[movie_id]["num_pos"]
+            "num_pos": movies_sentiment[movie_id]["num_pos"],
+            "similar_movies": similarMovies
         }
     )
     return render_template("detail.html", movie_detail=output)

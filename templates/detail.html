@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>CS410 Final Project - JDTV - Movie Search Engine</title>
+    <title>CS410 Final Project - Team DJTV - Movie Search Engine</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
@@ -16,61 +16,88 @@
     <br>
     <br>
     <table>
-    <thead>
-      <tr>
-        <th scope="col">Attribute</th>
-        <th scope="col">Value</th>
-      </tr>
-    </thead>
-    <tbody>
-    {% block content %}
-    {% for movieDetail in movie_detail %}
-        <tr>
-            <td>Name (Click name for link to IMDB)</td>
-            <td><a href="https://www.imdb.com/title/tt{{ movieDetail.movie_id }}" target="_blank" rel="noopener noreferrer">{{ movieDetail.localized_title }}</a></td>
-        </tr>
-        <tr>
-            <td>Year Released</td>
-            <td>{{ movieDetail.year }}</td>
-        </tr>
-        <tr>
-            <td>Length (minutes)</td>
-            <td>{{ movieDetail.length }}</td>
-        </tr>
-        <tr>
-            <td>Rating</td>
-            <td>{{ movieDetail.rating }}</td>
-        </tr>
-        <tr>
-            <td>Review Sentiment</td>
-            <td>{{ movieDetail.sentiment }} <br><br> {{ movieDetail.num_reviews }} Reviews | {{ movieDetail.num_pos }} Positive | {{ movieDetail.num_neg }} Negative | {{ movieDetail.num_neu }} Neutral</td>
-        </tr>
+        <thead>
+          <tr>
+            <th scope="col">Attribute</th>
+            <th scope="col">Value</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% block content %}
+        {% for movieDetail in movie_detail %}
+            <tr>
+                <td>Movie Poster</td>
+                <td><img src={{movieDetail.cover_url}}></td>
+            </tr>
+            <tr>
+                <td>Name (Click name for link to IMDB)</td>
+                <td><a href="https://www.imdb.com/title/tt{{ movieDetail.movie_id }}" target="_blank" rel="noopener noreferrer">{{ movieDetail.localized_title }}</a></td>
+            </tr>
+            <tr>
+                <td>Year Released</td>
+                <td>{{ movieDetail.year }}</td>
+            </tr>
+            <tr>
+                <td>Length (minutes)</td>
+                <td>{{ movieDetail.length }}</td>
+            </tr>
+            <tr>
+                <td>Rating</td>
+                <td>{{ movieDetail.rating }}</td>
+            </tr>
+            <tr>
+                <td><b>Review Sentiment</b></td>
+                <td><b>{{ movieDetail.sentiment }} </b><br><br> {{ movieDetail.num_reviews }} Reviews <br> Analyzed sentiment: {{ movieDetail.num_pos }} Positive | {{ movieDetail.num_neg }} Negative | {{ movieDetail.num_neu }} Neutral</td>
+            </tr>
 
-        <tr>
-            <td>Genre(s)</td>
-            <td>
-                {% for genre in movieDetail.genres %}
-                    {{ genre }},
-                {%  endfor %}
-            </td>
-        </tr>
+            <tr>
+                <td>Genre(s)</td>
+                <td>
+                    {% for genre in movieDetail.genres %}
+                        {{ genre }},
+                    {%  endfor %}
+                </td>
+            </tr>
 
-        <tr>
-            <td>Summary</td>
-            <td>{{ movieDetail.summary }}</td>
-        </tr>
-        <tr>
-            <td>Cast</td>
-            <td>
-                {% for castMember in movieDetail.cast %}
-                    {{ castMember }},
-                {%  endfor %}
-            </td>
-        </tr>
-    {% endfor %}
+            <tr>
+                <td>Summary</td>
+                <td>{{ movieDetail.summary }}</td>
+            </tr>
+            <tr>
+                <td>Cast</td>
+                <td>
+                    {% for castMember in movieDetail.cast %}
+                        {{ castMember }},
+                    {%  endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <table>
+        <caption><b>Similar Movies</b></caption>
+        <thead>
+          <tr>
+            <th scope="col">Movie Poster</th>
+            <th scope="col">Movie Title</th>
+            <th scope="col">Year</th>
+            <th scope="col">Sentiment</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for movieDetail in movie_detail %}
+            {% for movie in movieDetail.similar_movies %}
+            <tr>
+                <td><img src={{movie.cover_url}}></td>
+                <td><a href="/detail/{{movie.movie_id}}">{{movie.localized_title}}</a></td>
+                <td><a href="/detail/{{movie.movie_id}}">{{movie.year}}</a></td>
+                <td><a href="/detail/{{movie.movie_id}}">{{movie.sentiment}}</a></td>
+            </tr>
+            {% endfor %}
+        {% endfor %}
+        </tbody>
+      </table>
     {% endblock %}
-    </tbody>
-  </table>
-
 </body>
 </html>
