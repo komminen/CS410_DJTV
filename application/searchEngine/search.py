@@ -69,7 +69,8 @@ class movieSearchEngine:
             return -1
 
     def run(self, query_string, ranker="bm25", config="config.toml"):
-        
+        print('Search Engine called with ranker: {} for the query: "{}" against corpus: {}'.format(ranker, query_string, config))
+
         # Change Directory to searchEngine folder
         os.chdir("application/searchEngine")
         
@@ -91,7 +92,7 @@ class movieSearchEngine:
         top_k = 10
 
         # get the config dictionary
-        with open(self.cfg, 'r') as fin:
+        with open(config, 'r') as fin:
             cfg_d = pytoml.load(fin)
 
         # grab the query runner
@@ -99,7 +100,7 @@ class movieSearchEngine:
         # where we need to runs multiple queries
         query_cfg = cfg_d['query-runner']
         if query_cfg is None:
-            print("query-runner table needed in {}".format(self.cfg))
+            print("query-runner table needed in {}".format(config))
             return
 
         # start timer + how many top results do you want

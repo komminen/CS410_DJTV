@@ -68,6 +68,7 @@ def movieDetail(movie_id):
         print('POST')
         algo = request.form.get("algorithm")
         filename = 'data/similarMovies_'+algo+'.json'
+        print(algo, filename)
         movies_similar = json.load(open(filename))
 
     # Clean up the sentiment text for output in the rendered html
