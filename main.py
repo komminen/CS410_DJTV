@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 # Init
 movie_search_engine = movieSearchEngine(
-    cfg="config_whole.toml",
+    cfg="config.toml",
     movie_review_path="application/searchEngine/movie_reviews_dataset.json",
     ranker="bm25"
 )
@@ -38,8 +38,11 @@ def index():
 @app.route('/search/', methods=['POST'])
 def searchMovies():
     query = request.form.get("query")
+    ranker = request.form.get("ranker")
+    corpus = request.form.get("corpus")
+    print(ranker, corpus)
     # movie_result = run("config_whole.toml", "bm25", query)
-    movie_result = movie_search_engine.run(query)
+    movie_result = movie_search_engine.run(query, ranker, corpus)
     output = []
     for movie_id in movie_result:
         output.append(

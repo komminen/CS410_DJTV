@@ -68,7 +68,7 @@ class movieSearchEngine:
         else:
             return -1
 
-    def run(self, query_string):
+    def run(self, query_string, ranker="bm25", config="config.toml"):
         
         # Change Directory to searchEngine folder
         os.chdir("application/searchEngine")
@@ -77,9 +77,9 @@ class movieSearchEngine:
         if os.path.exists(os.getcwd() + '\idx'):
             shutil.rmtree(os.getcwd() + '\idx')
         
-        idx = metapy.index.make_inverted_index(self.cfg)
+        idx = metapy.index.make_inverted_index(config)
         # load ranker
-        ranker = self.load_ranker(self.ranker)
+        ranker = self.load_ranker(ranker)
         if ranker == -1:
             print('ranker is not set correctly')
             return
