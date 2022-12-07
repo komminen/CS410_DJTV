@@ -75,15 +75,21 @@
         </tbody>
     </table>
 
-    <br><br> Select an algorithm for Similar Movies
+    <br><br> Select a method for Similar Movies (Default: BERT)
     {% for movieDetail in movie_detail %}
     <form action="/detail/{{ movieDetail.movie_id }}" method="POST">
-        <select name="algorithm" id="select" onchange="this.form.submit()">
-            <option value="default">Select an algorithm</option>
-            <option value="bert">BERT</option>
-            <option value="gensim">Word2Vec</option>
-            <option value="tfidf">TF-IDF</option>
+        <select name="algorithm" id="select">
+            <option value="bert">Select a method</option>
+            <option value="bert"> BERT</option>
+            <option value="gensim"> Word2Vec</option>
+            <option value="tfidf"> TF-IDF</option>
         </select>
+        <br><br>
+        <span class="input-group-btn">
+            <button name="searchBtn" class="btn btn-primary btn-lg" type="submit">
+            Update Similar Movies
+            </button>
+        </span>
     {% endfor %}
     </form>
     <table>

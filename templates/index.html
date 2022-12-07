@@ -9,7 +9,7 @@
 </head>
 <body>
  <div class="container">
-    <center><h1>Movie Search</h1></center>
+    <center><h1>Intelligent Movie Search</h1></center>
   <div class="row">    
    <div class="col-xs-8 col-xs-offset-2">
     <form action="/search/" method="post">
@@ -23,23 +23,43 @@
         </div>
         <br>
         <div class="input-group">
-            Choose a Ranker
+            Choose a Ranker (Default: Okapi BM25)
+            <select name="ranker" id="select">
+                <option value="bm25">Select a Ranker</option>
+                <option value="bm25"> Okapi BM25</option>
+                <option value="jm"> Jelinek-Mercer</option>
+                <option value="dp"> Dirichlet Prior</option>
+            </select>
+            <!--
             <input type="radio" name="ranker" value="bm25" checked="true"> Okapi BM25
             <input type="radio" name="ranker" value="jm"> Jelinek-Mercer
-            <input type="radio" name="ranker" value="dp"> Dirichlet Prior
+            <input type="radio" name="ranker" value="dp"> Dirichlet Prior -->
         </div>
+        <br>
         <div class="input-group">
-            Choose a Search corpus
+            Choose a Search corpus (Default: Movie Names only)
+            <select name="corpus" id="select">
+                <option value="config.toml">Select a Corpus</option>
+                <option value="config.toml"> Movie Names Only</option>
+                <option value="config_whole.toml"> All Movie Metadata</option>
+            </select>
+            <!--
             <input type="radio" name="corpus" value="config.toml" checked="true"> Movie Names only
-            <input type="radio" name="corpus" value="config_whole.toml" name="whole"> All Movie metadata
+            <input type="radio" name="corpus" value="config_whole.toml"> All Movie metadata -->
         </div>
     </form>
+       <br><b>Please Note: </b> The movies in the dataset are restricted to the ~50,000 movies in the
+       <a href="https://ai.stanford.edu/~amaas/data/sentiment/"> Stanford large movie review dataset </a>
+       from early in the 2010s so some recent movies and some popular movies might be missing from the
+       dataset. Some known good search terms are movies like "Mission Impossible", "Top Gun" and many more.
+
    </div>
+
   </div>
 </div>
 
 <table>
-    <caption>Search Result</caption>
+    <caption>Search Results</caption>
     <thead>
       <tr>
         <th scope="col">Movie Poster</th>
