@@ -75,6 +75,17 @@
         </tbody>
     </table>
 
+    <br><br> Select an algorithm for Similar Movies
+    {% for movieDetail in movie_detail %}
+    <form action="/detail/{{ movieDetail.movie_id }}" method="POST">
+        <select name="algorithm" id="select" onchange="this.form.submit()">
+            <option value="default">Select an algorithm</option>
+            <option value="bert">BERT</option>
+            <option value="gensim">Word2Vec</option>
+            <option value="tfidf">TF-IDF</option>
+        </select>
+    {% endfor %}
+    </form>
     <table>
         <caption><b>Similar Movies</b></caption>
         <thead>

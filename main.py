@@ -15,7 +15,7 @@ movie_search_engine = movieSearchEngine(
 movies_metadata = json.load(open("data/movies_metadata.json"))
 movies_sentiment = json.load(open("data/review_sentiment_counts.json"))
 # For now, hard code to bert which had the best results
-movies_similar = json.load(open("data/similarMovies_bert.json"))
+
 
 def fixSentimentText(sentiment):
     fixedSentiment = sentiment
@@ -58,10 +58,17 @@ def searchMovies():
 
     return render_template("index.html", movieResults=output)
 
-@app.route('/detail/<movie_id>/', methods=['GET'])
+@app.route('/detail/<movie_id>/', methods=['GET', 'POST'])
 def movieDetail(movie_id):
     output = [] #{'movie_id': movie_id}
     similarMovies = []
+    movies_similar = json.load(open("data/similarMovies_bert.json"))
+
+    if request.method == 'POST':
+        print('POST')
+        algo = request.form.get("algorithm")
+        filename = 'data/similarMovies_'+algo+'.json'
+        movies_similar = json.load(open(filename))
 
     # Clean up the sentiment text for output in the rendered html
     sentiment = fixSentimentText(movies_sentiment[movie_id]["sentiment"])
