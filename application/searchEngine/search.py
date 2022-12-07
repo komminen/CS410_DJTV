@@ -75,8 +75,8 @@ class movieSearchEngine:
         os.chdir("application/searchEngine")
         
         # build indexes
-        if os.path.exists(os.getcwd() + '\idx'):
-            shutil.rmtree(os.getcwd() + '\idx')
+        #if os.path.exists(os.getcwd() + '\idx'):
+        #    shutil.rmtree(os.getcwd() + '\idx')
         
         idx = metapy.index.make_inverted_index(config)
         # load ranker

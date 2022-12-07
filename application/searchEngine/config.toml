@@ -3,7 +3,7 @@ stop-words = "stopwords.txt"
 
 dataset = "movies"
 corpus = "line.toml"
-index = "idx"
+index = "idx_names"
 
 [[analyzers]]
 method = "ngram-word"
